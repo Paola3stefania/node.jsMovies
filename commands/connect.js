@@ -8,25 +8,36 @@ import https from 'https'
 
 const connect = {};
 
-connect.req = https.request({
-  hostname: 'api.themoviedb.org',
-  port: 443,
-  path: `/3/person/1?api_key=${API_KEY}`,
-  method: 'GET',
-  json: true
-  //header: `Authorization: Bearer ${API_KEY}`
-}, res => {
 
-  // Get data from res.object
-  res.on('data', data => {
-    console.log(data)
+connect.person = getPersonById
+
+function getPersonById(id) {
+  return new Promise((resolve, reject) =>{ 
+    let req = https.request({
+      hostname: 'api.themoviedb.org',
+      port: 4,
+      path: `/3/person/${id}?api_key=${API_KEY}`,
+      method: 'GET'
+      //header: `Authorization: Bearer ${API_KEY}`
+    }, res => {
+    
+      let json = '';
+      // Get data from res.object
+      res.on('data', data => {
+        json += data;
+      });
+    
+      res.on('end', () => {
+        resolve(JSON.parse(json));
+      });
+
+    }).on('error', (error) => {
+      reject(error)
+    });
+
+    req.end()
   })
-})
+}
 
-connect.req.on('error', error => {
-  console.error(error)
-})
-
-connect.req.end()
 
 export default connect
