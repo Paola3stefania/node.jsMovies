@@ -1,21 +1,13 @@
 #!/usr/bin/env node
+import {init} from "./router.js"; 
 
-import {myFunc} from './commands/get-persons.js'
-import connect from './commands/connect.js'
+/**
+ *  This are the commands in the CLI
+ *  process.argv[0] & process.argv[1] are files directories from node server
+ *  process.argv[2] => "command-movie"
+ *  process.argv[3-n] => function params
+ *
+ * */
 
-
-
-
-(async () => {
-  
-  try {
-    let data = await connect.person(process.argv[2])
-    console.log('Data: ' + data)
-  } catch (error) {
-    console.error(error)
-  }
-
-
-})()
-
-//myFunc(process.argv[2])
+let args = process.argv.slice(2);
+init(args);

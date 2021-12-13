@@ -34,3 +34,21 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Notes
 
 npm link: explain...
+
+## Software Architecture
+command-movie
+  get-person
+    --id <int> *
+
+  get-persons
+    --page <int> *
+    --popular *
+
+  get-movie
+    --id <int> *
+    --reviews
+
+  get-movies
+    --page <int> *
+    --popular **
+    --now-playing **
