@@ -1,8 +1,8 @@
 import connect from './connect.js';
 
-export async function getAllData(params) {
+export async function getData(params) {
   try {
-    let data = await connect.getAll(params)
+    let data = await connect.get(params)
     return data
   } catch (error) {
     return error

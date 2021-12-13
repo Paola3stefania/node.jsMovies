@@ -1,64 +1,50 @@
 #!/usr/bin/env node
 
-import { getAllData } from "./commands/get-all.js";
-import { getData } from "./commands/get-single.js";
+import { getData } from "./commands/get-all.js";
+import { getType } from './helper/functions.js';
+import { configCommands } from "./config.js";
 
-
+/**
+ * 
+ * @param {*} args | Array with parameters
+ * @returns void | prints in CLI
+ */
 export async function init(args) {
-  switch (args[0]) {
+  configCommands.map(async (elm) => {
+    if (args[0] === elm.case) {
 
-    case "get-person":
-  
-      if (args[1] === '--id') {
-        let id = args[2]
-        let data = await getData(id, 'person')
-        console.log(data)
-      } else {
-        console.log('Expected option --id')
-      }
-  
-      break;
-    case "get-persons":
-
-      
-
-      break;
-  
-    case "get-movie":
-
-      if (args[1] === '--id') {
-        let id = args[2]
-        let data = await getData(id, 'movie')
-        console.log(data)
-      } else {
-        console.log('Expected option --id')
-      }
-
-      break;
-  
-    case "get-movies":
-
-      args.map(elm => {
-        if (typeof elm === 'undefined') {
-          console.log('Missing')
+      let validator = true
+      args.forEach(arg => {
+        if (!elm.options.includes(arg) && !Number.isInteger(+arg) ) {
+          console.log('Enter --help to see available arguments', arg)
+          validator = false;
+          return validator;
         }
       })
 
-      const options = {
-        type: getType(args[0]),
-        page: typeof args[2] !== 'undefined' ? args[2] : '1',
-        optional: typeof args[3] !== 'undefined' ? args[3] : '' 
+
+      if (validator) {
+        const params = {
+          type: getType(args[0]),
+          id: args.includes('--id') ? args[2] : '',
+          page: args.includes('--page') ? args[2] : '',
+          optional: typeof args[3] !== 'undefined' ? args[3].replace('--', '') : '' 
+        }
+
+        let data = await getData(params)
+        console.log(data)
+
+        // To display the diferent properties depending on the items to show
+        Object.keys(data).map(elm => {
+          if (elm === 'results') {
+            data[elm].map(item => {
+              console.log(item.title)
+            })
+          }
+        })
       }
-      
-      getAllData(options)
-
-
-      break;
-    
-    default:
-      console.log('Enter --help to see available arguments')
-    break;
-  }
+    } 
+  })
 }
 
 

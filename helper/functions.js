@@ -9,5 +9,8 @@
  */
 export function getType(param) {
   let command = param.replace('get-', '')
-  return command.substring(0, command.length - 1)
+  if (command[command.length - 1] === 's') {
+    command = command.substring(0, command.length - 1)
+  }
+  return command;
 }
