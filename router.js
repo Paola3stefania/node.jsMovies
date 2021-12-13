@@ -15,6 +15,9 @@ export async function init(args) {
 
       let validator = true
       args.forEach(arg => {
+        // If arg is not included in the option array,
+        // and if is not a int then return False
+        // (The string is converted to int by + character and checked by .isInteger method)
         if (!elm.options.includes(arg) && !Number.isInteger(+arg) ) {
           console.log('Enter --help to see available arguments', arg)
           validator = false;
